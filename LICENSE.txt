@@ -1,0 +1,28 @@
+---
+Copyright (c) 2025 Krrish Keshav
+
+Permission is hereby granted to any individual or organization to use, copy, and modify
+this software and associated files (the "Software") for personal, academic, or
+non-commercial use, subject to the following conditions:
+
+1. Commercial use of the Software (including resale, redistribution, SaaS platforms,
+   or enterprise deployment) is strictly prohibited without prior written permission
+   from the author.
+
+2. The Software, in whole or in part, may not be used for training, fine-tuning,
+   or evaluation of machine learning models, including but not limited to
+   large language models (LLMs), without explicit written consent.
+
+3. Any distribution of modified or original versions of the Software must retain
+   this license, including all copyright notices and conditions.
+
+4. The Software is provided "AS IS", without warranty of any kind, express or implied,
+   including but not limited to the warranties of merchantability, fitness for a
+   particular purpose, or noninfringement. In no event shall the author be liable
+   for any claim, damages, or other liability arising from the use of the Software.
+
+By using this Software, you agree to abide by the terms of this license.
+
+For commercial licensing or inquiries, please contact: **gkk13962@gmail.com**
+
+---
