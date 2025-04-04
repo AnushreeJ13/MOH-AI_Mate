@@ -60,7 +60,8 @@ cd moh-ai-mate
 ```
 
 ### 2. Backend Setup
-
+Use a open router key 
+Save it in your system locally
 ```bash
 cd backend
 pip install -r requirements.txt
