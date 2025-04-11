@@ -1,7 +1,8 @@
-altair==4.2.2
-streamlit==1.12.0
 transformers==4.28.1
+tokenizers==0.13.3        # uses prebuilt wheels, avoids Rust issue
 torch==2.2.0
+streamlit==1.12.0
+altair==4.2.2             # needed for Streamlit compatibility
 speechrecognition==3.8.1
 markdown-it-py==3.0.0
 pygments==2.19.1
