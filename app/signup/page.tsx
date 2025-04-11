@@ -3,6 +3,34 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
+import { initializeApp } from "firebase/app";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+
+// Import the functions you need from the SDKs you need
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAzbzw54O_JRDNOfHyteIMvq999R3Aj624",
+  authDomain: "ehsaas-f4c7e.firebaseapp.com",
+  projectId: "ehsaas-f4c7e",
+  storageBucket: "ehsaas-f4c7e.firebasestorage.app",
+  messagingSenderId: "618055369757",
+  appId: "1:618055369757:web:3592bd6978c85df0f432f4",
+  measurementId: "G-JTTDNV43GD"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+// Initialize Firebase
+
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 export default function SignupPage() {
   const [username, setUsername] = useState("");
@@ -15,23 +43,35 @@ export default function SignupPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
-    
+
     setIsLoading(true);
     setError("");
-    
+
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Success - redirect to home
-      router.push('/');
+      // Create user with email and password
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      console.log("Account created for:", user.email);
+
+      // Save user info to Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        username: username,
+        email: user.email,
+        createdAt: new Date(),
+      });
+
+      // Redirect to home page after successful sign-up
+      router.push("/login");
+
     } catch (err) {
       setError("Signup failed. Please try again.");
+      console.error("Signup error:", err.message);
     } finally {
       setIsLoading(false);
     }
@@ -40,12 +80,12 @@ export default function SignupPage() {
   return (
     <>
       <Script src="https://use.fontawesome.com/releases/v6.5.1/js/all.js" />
-      
+
       <div className="relative h-screen w-screen bg-[#030014] overflow-hidden flex items-center justify-center">
         {/* Background elements */}
         <div className="blob blob-1"></div>
         <div className="blob blob-2"></div>
-        
+
         {/* Stars background */}
         <div className="absolute inset-0">
           <div className="w-full h-full">
@@ -70,33 +110,34 @@ export default function SignupPage() {
                   Sign Up
                   <i className="fa-solid fa-rocket"></i>
                 </h2>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   placeholder="Username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
-                <input 
-                  type="email" 
+                <input
+                  type="email"
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                <input 
-                  type="password" 
+                <input
+                  type="password"
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <input 
-                  type="password" 
+                <input
+                  type="password"
                   placeholder="Confirm Password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
-                <input 
-                  type="submit" 
-                  value={isLoading ? "Creating Account..." : "Create Account"} 
+                {error && <div className="text-red-500 text-sm">{error}</div>} {/* Error message */}
+                <input
+                  type="submit"
+                  value={isLoading ? "Creating Account..." : "Create Account"}
                   onClick={handleSubmit}
                   disabled={isLoading}
                 />

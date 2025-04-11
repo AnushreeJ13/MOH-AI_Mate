@@ -5,7 +5,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import dynamic from 'next/dynamic';
 import { useRouter } from "next/navigation";
-
+import Saathi from './saathi'; // adjust path if needed
 // Dynamically import ChatBot with no SSR to avoid hydration issues
 const ChatBot = dynamic(() => import("@/components/main/ChatBot"), { 
   ssr: false,
@@ -44,7 +44,7 @@ const Navbar = () => {
               Chat
             </a>
             <a href="#skills" className="cursor-pointer">
-              how i was made 
+             Techiess
             </a>
             <a href="#projects" className="cursor-pointer">
               About me 
@@ -55,6 +55,13 @@ const Navbar = () => {
             >
               Login
             </button>
+            <button 
+              onClick={() => router.push('/saathi')} 
+              className="cursor-pointer bg-transparent border-none text-gray-200 hover:text-white transition-colors"
+            >
+              Saathi
+            </button>
+
           </div>
         </div>
       </div>

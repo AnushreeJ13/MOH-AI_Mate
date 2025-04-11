@@ -10,9 +10,11 @@ const Hero = () => {
         autoPlay
         muted
         loop
-        className="rotate-180 absolute top-[-340px]  h-full w-full left-0 z-[1] object-cover "
+        className="absolute top-10 left-10 h-[200px] w-[400px] z-[1] object-cover rounded-xl shadow-lg"
       >
+        
         <source src="/blackhole.webm" type="video/webm" />
+        <br/>
       </video>
       <HeroContent />
       {/* Removed the Explore MOH button that was here */}

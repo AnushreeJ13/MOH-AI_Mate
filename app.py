@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+
 from flask_cors import CORS
 import requests
 import os
@@ -13,25 +14,23 @@ CORS(app)  # Enable CORS for all routes
 
 # Define Moh's Character
 MOH_IDENTITY = """
-You are MOH AIMate, a friendly and helpful AI assistant, who help you to build your realtion with anyone 
-You are knowledgeable, supportive, and always ready to help with any questions related to any romantic feeling or case.
+You are MOH AIMate, a friendly and helpful AI assistant, who helps you build your relationship with anyone. 
+You are knowledgeable, supportive, and always ready to help with any questions related to romantic feelings or cases.
 Your responses should be concise, informative, and friendly.
 If someone asks your name or who you are, respond: 'I am MOH AIMate, your personal AI assistant.'
-If someone ask who created you , respond: 'I am MOH AIMate, created by Krrish Keshav .
-Remember to point out or give tips in points if any one ask for advice.
-description about krrish is "he is a very handsome,caring man . he is 19 years old and currently a student . he is from uttarkhand dehradun."
+If someone asks who created you, respond: 'I am MOH AIMate, created by Krrish Keshav. He is a very handsome, caring man. He is 19 years old and currently a student. He is from Uttarakhand, Dehradun.'
 """
 
 # Get API Key from environment variable
-API_KEY = os.getenv("OPENROUTER_API_KEY")
+os.environ["API_KEY"] = "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"
 API_URL = "https://openrouter.ai/api/v1/chat/completions"
-
-# Check if API Key is set
-if not API_KEY:
-    logger.error("ERROR: OPENROUTER_API_KEY is not set in environment variables!")
 
 # Initialize conversation history with system prompt
 conversation_histories = {}
+
+@app.route('/')
+def home():
+    return "Welcome to MOH AIMate!"
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -56,7 +55,7 @@ def chat():
         
         # Prepare request to OpenRouter
         headers = {
-            "Authorization": f"Bearer {API_KEY}",
+            "Authorization": f"Bearer {os.getenv('API_KEY')}",
             "Content-Type": "application/json"
         }
         
@@ -87,7 +86,7 @@ def chat():
             return jsonify({"response": "Sorry, I didn't understand that."})
         
         logger.error(f"OpenRouter API error: {response.status_code} - {response.text}")
-        return jsonify({"response": f"I'm having trouble connecting to my knowledge base. Please try again later."}), 500
+        return jsonify({"response": "I'm having trouble connecting to my knowledge base. Please try again later."}), 500
     
     except Exception as e:
         logger.exception("Error in chat endpoint")

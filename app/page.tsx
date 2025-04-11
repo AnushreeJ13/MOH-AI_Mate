@@ -3,6 +3,7 @@ import Encryption from "@/components/main/Encryption";
 import Hero from "@/components/main/Hero";
 
 import Projects from "@/components/main/Projects";
+import Saathi from "@/components/main/saathi"; 
 import Skills from "@/components/main/Skills";
 import Image from "next/image";
 import { useState } from 'react';
@@ -19,6 +20,7 @@ export default function Home() {
         <Skills />
         <Encryption />
         <Projects />
+        <Saathi /> {/* 👈 Saathi component added at the bottom */}
       </div>
       
       {/* Render ChatBot only when chat is open */}

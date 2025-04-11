@@ -1,22 +1,69 @@
-"use client";
-
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { slideInFromTop } from "@/utils/motion";
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+
+// Import the functions you need from the SDKs you need
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAzbzw54O_JRDNOfHyteIMvq999R3Aj624",
+  authDomain: "ehsaas-f4c7e.firebaseapp.com",
+  projectId: "ehsaas-f4c7e",
+  storageBucket: "ehsaas-f4c7e.firebasestorage.app",
+  messagingSenderId: "618055369757",
+  appId: "1:618055369757:web:3592bd6978c85df0f432f4",
+  measurementId: "G-JTTDNV43GD"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+// Initialize Firebase
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 const Login = ({ onClose }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState(""); // Email state
+  const [password, setPassword] = useState(""); // Password state
+  const [error, setError] = useState(""); // To capture and display errors
   const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically handle authentication
-    console.log("Login attempt with:", username);
-    
-    // For demo purposes, just close the modal
-    onClose();
+    setError(""); // Reset any previous errors
+
+    try {
+      // Firebase Authentication login
+      const userCredential = await signInWithEmailAndPassword(auth, username, password);
+      const user = userCredential.user;
+
+      console.log("Logged in as:", user.email);
+
+      // Save user info to Firestore (for example, user's email)
+      await setDoc(doc(db, "users", user.uid), {
+        email: user.email,
+        lastLogin: new Date(),
+        // Add any additional fields you want to store in Firestore
+      });
+
+      // Redirect to dashboard or any desired page after successful login
+      router.push("/dashboard");
+
+      // Close modal after login
+      onClose();
+    } catch (err) {
+      setError("Login failed. Please check your credentials.");
+      console.error("Login error:", err.message);
+    }
   };
 
   return (
@@ -57,8 +104,8 @@ const Login = ({ onClose }) => {
               </motion.h2>
               
               <input 
-                type="text" 
-                placeholder="Username" 
+                type="email" // Changed to email input
+                placeholder="Email" 
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full px-5 py-2 outline-none border-none text-white bg-[#0000001a] border-2 border-[#7042f88b] rounded-[30px]"
@@ -71,6 +118,8 @@ const Login = ({ onClose }) => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-5 py-2 outline-none border-none text-white bg-[#0000001a] border-2 border-[#7042f88b] rounded-[30px]"
               />
+              
+              {error && <div className="text-red-500 text-sm">{error}</div>} {/* Error message */}
               
               <button
                 onClick={handleSubmit}
