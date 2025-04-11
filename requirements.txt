@@ -1,0 +1,7 @@
+streamlit
+speechrecognition
+transformers
+deep-translator
+pydantic
+fastapi
+uvicorn
