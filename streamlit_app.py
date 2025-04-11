@@ -4,7 +4,7 @@ from transformers import pipeline
 from deep_translator import GoogleTranslator
 
 # Load Pretrained Emotion Detection Model (English-based model)
-emotion_model = pipeline("text-classification", model="j-hartmann/emotion-english-distilroberta-base")
+emotion_model = pipeline("text-classification", model="j-hartmann/emotion-english-distilroberta-base",device=-1)
 
 st.title("Ehsaas: Express Your Feelings")
 
